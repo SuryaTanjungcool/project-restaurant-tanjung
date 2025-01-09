@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_Login } from "../../util/baseurl";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8080/api/login", {
+      const response = await axios.post(`${API_Login}/login`, {
         email,
         password,
       });

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AdminNavbar from '../Navbarkhusus';
+import { API_Toko } from "../../util/baseurl";
 
 const AdminDashboard = () => {
   const adminData = JSON.parse(localStorage.getItem('adminData'));
   const idAdmin = adminData ? adminData.id : null;
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
   const [dessertData, setDessertData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ const AdminDashboard = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:8080/api/admin/toko/getAllByAdmin/${idAdmin}`);
+        const response = await axios.get(`${API_Toko}/getAllByAdmin/${idAdmin}`);
         setDessertData(response.data);
         setLoading(false);
       } catch (err) {
@@ -42,7 +43,7 @@ const AdminDashboard = () => {
 
     try {
       setDeleting(true);
-      await axios.delete(`http://localhost:8080/api/admin/toko/delete/${id}`);
+      await axios.delete(`${API_Toko}/delete/${id}`);
       setDessertData(dessertData.filter((item) => item.id !== id));
       setDeleting(false);
     } catch (err) {
@@ -53,7 +54,7 @@ const AdminDashboard = () => {
 
   // Handle edit (navigate to EditDashboard with id)
   const handleEdit = (id) => {
-    navigate(`/EditDashboard/${id}`); // Navigate to EditDashboard with the id
+    navigate(`/EditDashboard/${id}`);
   };
 
   return (
@@ -77,7 +78,6 @@ const AdminDashboard = () => {
               </Link>
             </div>
 
-            {/* Responsive Table */}
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg overflow-x-auto">
               <table className="min-w-full table-auto">
                 <thead className="bg-gray-700 text-gray-200">

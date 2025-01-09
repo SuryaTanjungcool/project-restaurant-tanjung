@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_Toko } from '../../util/baseurl';
 
 const AddDashboard = () => {
   const navigate = useNavigate();
@@ -12,8 +13,9 @@ const AddDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !price) {
-      setError('Nama dan harga kue harus diisi!');
+    // Validasi input
+    if (!name || !price || isNaN(price) || parseFloat(price) <= 0) {
+      setError('Nama dan harga kue harus diisi dengan harga yang valid!');
       return;
     }
 
@@ -35,15 +37,18 @@ const AddDashboard = () => {
       };
 
       const response = await axios.post(
-        `http://localhost:8080/api/admin/toko/tambah/${idAdmin}`,
+        `${API_Toko}/tambah/${idAdmin}`,
         newDessert
       );
 
       if (response.status === 200) {
         navigate('/dashboard'); // Redirect ke halaman dashboard
+      } else {
+        setError('Gagal menambah kue. Silakan coba lagi.');
       }
     } catch (error) {
-      setError('Gagal menambah kue. Silakan coba lagi.');
+      setError('Terjadi kesalahan, gagal menambah kue. Silakan coba lagi.');
+      console.error('Error:', error); // Log error untuk debug
     } finally {
       setLoading(false);
     }

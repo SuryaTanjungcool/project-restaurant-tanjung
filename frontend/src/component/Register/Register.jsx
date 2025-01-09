@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { API_Register } from '../../util/baseurl';
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,14 +12,14 @@ const Register = () => {
     e.preventDefault();
  
     try {
-      const response = await axios.post("http://localhost:8080/api/admin/register", {
+      const response = await axios.post(`${API_Register}/register`, {
         name,
         email,
         password,
       });
 
       alert("Registrasi berhasil! Silakan login.");
-      navigate("/login");
+      navigate("/akunlogin");
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Terjadi kesalahan.";
       alert(`Gagal registrasi: ${errorMessage}`);

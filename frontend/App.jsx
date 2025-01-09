@@ -130,7 +130,6 @@ const App = () => {
             path="/dashboard"
             element={
               <>
-                <AdminNavbar />
                 <PrivateRoute element={<DashboardAdmin />} />
               </>
             }
@@ -139,7 +138,6 @@ const App = () => {
             path="/AddDashboard"
             element={
               <>
-                <AdminNavbar />
                 <PrivateRoute element={<AddDashboard />} />
               </>
             }
@@ -148,7 +146,6 @@ const App = () => {
             path="/EditDashboard/:id"
             element={
               <>
-                <AdminNavbar />
                 <PrivateRoute element={<EditDashboard />} />
               </>
             }
@@ -158,7 +155,6 @@ const App = () => {
             path="/edit-dessert/:id"
             element={
               <>
-                <AdminNavbar />
                 <PrivateRoute element={<EditDessert />} />
               </>
             }

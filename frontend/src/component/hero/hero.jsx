@@ -13,31 +13,27 @@ const BgStyle = {
 const Hero = () => {
   return (
     <div style={BgStyle} className="relative z-[-1]">
-      <div className="container mx-auto px-6 py-10 sm:py-8">
-        <div className="flex flex-col-reverse sm:flex-row items-center justify-center sm:justify-between min-h-[600px] space-y-8 sm:space-y-0">
+      <div className="container mx-auto px-6 py-12 sm:py-16 lg:py-20">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-center sm:justify-between min-h-[650px] space-y-10 sm:space-y-0">
           {/* text-content section */}
-          <div className="space-y-5 text-dark max-w-lg text-center sm:text-left px-4 sm:px-0">
+          <div className="space-y-6 text-dark max-w-xl text-center sm:text-left px-4 sm:px-0">
             <h1
               data-aos="fade-up"
-              className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight"
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight text-primary"
             >
-              Fresh & Healthy Meal Plan{' '}
-              <span className="text-secondary font-cursive text-4xl sm:text-5xl md:text-6xl">
-                delivery
-              </span>{' '}
-              in Miami
+              Selamat datang di dunia <span className="text-secondary font-cursive">manis</span> & lezat!
             </h1>
             <p
               data-aos="fade-up"
               data-aos-delay="300"
-              className="text-base sm:text-lg leading-relaxed"
+              className="text-lg sm:text-xl leading-relaxed text-gray-700"
             >
-              Delicious Meals Delivered to your Door From $132.95 per week
+              Nikmati berbagai dessert istimewa buatan koki bintang 5, dibuat dengan cinta & bahan berkualitas tinggi. 
             </p>
-
+            
             {/* button section */}
             <div className="flex justify-center sm:justify-start">
-              <PrimaryButton />
+              <PrimaryButton text="Jelajahi Menu" />
             </div>
           </div>
 
@@ -45,12 +41,12 @@ const Hero = () => {
           <div
             data-aos="fade-up"
             data-aos-delay="300"
-            className="relative z-30 w-full max-w-[300px] sm:max-w-md lg:max-w-lg"
+            className="relative z-30 w-full max-w-[350px] sm:max-w-md lg:max-w-lg shadow-lg rounded-lg overflow-hidden"
           >
             <img
               src={HeroImg}
-              alt="Healthy Meal"
-              className="w-full h-auto mx-auto"
+              alt="Dessert Lezat"
+              className="w-full h-auto mx-auto transform hover:scale-105 transition-transform duration-300"
             />
           </div>
         </div>
