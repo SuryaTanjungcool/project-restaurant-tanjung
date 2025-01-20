@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_Register } from '../../util/baseurl';
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,7 +11,7 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
- 
+
     try {
       const response = await axios.post(`${API_Register}/register`, {
         name,
@@ -81,7 +82,7 @@ const Register = () => {
           Sudah punya akun?{" "}
           <button
             className="text-blue-400 underline"
-            onClick={() => navigate("/AkunAdmin")}
+            onClick={() => navigate("/akunlogin")} // Mengarahkan ke halaman login
           >
             Login
           </button>

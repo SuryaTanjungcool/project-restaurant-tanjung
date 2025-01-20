@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaUser } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa"; // Import ikon FaBars dan FaTimes
 import { useNavigate } from "react-router-dom";
 
 // Data Links
@@ -12,6 +12,7 @@ const NavLinks = [
 // Navbar Component
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State untuk toggle menu
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true); // State untuk menyembunyikan navbar
   const navigate = useNavigate();
 
   // Handle logout
@@ -22,48 +23,69 @@ const Navbar = () => {
     }
   };
 
-  return (
-    <div data-aos="fade" className="bg-white shadow-md dark:bg-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-3">
-        <div className="flex justify-between items-center">
-          {/* Logo Section */}
-          <div className="font-bold text-xl text-black dark:text-white">List</div>
-
-          {/* Hamburger for Mobile */}
-          <div className="sm:hidden flex items-center">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-2xl text-black dark:text-white"
-            >
-              <i className={`fas ${isMobileMenuOpen ? "fa-times" : "fa-bars"}`}></i>
-            </button>
-          </div>
-
-          {/* Navigation Section */}
-          <ul
-            className={`sm:flex items-center gap-10 space-x-8 ${
-              isMobileMenuOpen ? "block absolute bg-white shadow-lg top-full left-0 w-full p-4 sm:p-0 sm:relative sm:flex" : "hidden sm:flex"
-            }`}
-          >
-            {NavLinks.map(({ id, name, link }) => (
-              <li key={id}>
-                <a
-                  href={link}
-                  className="inline-block hover:text-primary text-xl font-semibold text-black dark:text-white"
-                >
-                  {name}
-                </a>
-              </li>
-            ))}
-
-            {/* Admin Account Button Section */}
-            <li>
-              <AccountAdminButton />
-            </li>
-          </ul>
-        </div>
+  if (!isNavbarVisible) {
+    return (
+      <div className="fixed top-4 left-4 z-50">
+        <button
+          onClick={() => setIsNavbarVisible(true)}
+          className="p-3 bg-secondary rounded-full shadow-lg hover:bg-secondary-dark text-white"
+        >
+          <FaBars size={24} />
+        </button>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <nav className="bg-white shadow-md dark:bg-gray-900 sticky top-0 z-50">
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Logo Section */}
+        <div className="text-2xl font-bold text-black dark:text-white">
+          <a href="/">MyWebsite</a>
+        </div>
+
+        {/* Navigation Links */}
+        <ul
+          className={`sm:flex items-center space-x-8 ${
+            isMobileMenuOpen
+              ? "block absolute bg-white dark:bg-gray-800 shadow-md top-full left-0 w-full p-4 sm:p-0 sm:relative sm:flex"
+              : "hidden sm:flex"
+          }`}
+        >
+          {NavLinks.map(({ id, name, link }) => (
+            <li key={id}>
+              <a
+                href={link}
+                className="text-lg font-medium text-black dark:text-white hover:text-primary dark:hover:text-primary-light"
+              >
+                {name}
+              </a>
+            </li>
+          ))}
+
+          {/* Admin Account Button */}
+          <li>
+            <AccountAdminButton />
+          </li>
+        </ul>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="sm:hidden text-2xl text-black dark:text-white"
+        >
+          {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        {/* Hide Navbar Button */}
+        <button
+          onClick={() => setIsNavbarVisible(false)}
+          className="hidden sm:flex items-center justify-center p-2 bg-red-500 text-white rounded-full hover:bg-red-600 ml-4"
+        >
+          <FaBars />
+        </button>
+      </div>
+    </nav>
   );
 };
 
@@ -78,10 +100,9 @@ const AccountAdminButton = () => {
   return (
     <button
       onClick={handleClick}
-      className="flex items-center gap-2 bg-secondary text-xl h-[40px] text-white px-2 lg:px-5 py-2 hover:scale-105 duration-300"
+      className="flex items-center justify-center bg-secondary text-white px-6 py-2 rounded-md text-lg font-medium hover:bg-secondary-dark"
     >
-      <FaUser />
-      Account Admin
+      Login Admin
     </button>
   );
 };

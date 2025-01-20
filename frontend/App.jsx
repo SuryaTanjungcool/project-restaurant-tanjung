@@ -6,7 +6,6 @@ import Banner from "./src/component/banner/Banner.jsx";
 import Hero from "./src/component/hero/hero.jsx";
 import About from "./src/component/About/About.jsx";
 import WhyChoose from "./src/component/WhyChoose/WhyChoose.jsx";
-import Footer from "./src/component/Footer/Footer.jsx";
 import Popup from "./src/component/popup/popup.jsx";
 import DashboardAdmin from "./src/component/DashboardAdmin/Dashbord.jsx";
 import PrimaryButton from "./src/component/Shared/PrimaryButton.jsx";
@@ -43,6 +42,8 @@ const App = () => {
         {/* Navbar berubah sesuai halaman */}
         <Routes>
           {/* Halaman dengan Navbar umum */}
+
+          
           <Route
             path="/"
             element={
@@ -88,15 +89,8 @@ const App = () => {
               </>
             }
           />
-          <Route
-            path="/footer"
-            element={
-              <>
-                <Navbar handlePopup={handlePopup} />
-                <Footer />
-              </>
-            }
-          />
+         
+          
           <Route
             path="/popup"
             element={
@@ -161,8 +155,6 @@ const App = () => {
           />
         </Routes>
 
-        {/* Footer tetap sama untuk semua halaman */}
-        <Footer />
 
         {/* Popup tetap bisa digunakan */}
         <Popup showPopup={showPopup} setshowPopup={setshowPopup} />
