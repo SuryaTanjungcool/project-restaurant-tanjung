@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { API_Toko } from '../../util/baseurl';
+import { API_Toko } from "../../util/BaseUrl";
 
-const AddDashboard = () => {
+const AddKue = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
+  const [namaKue, setNamaKue] = useState('');
+  const [hargaKue, setHargaKue] = useState('');
+  const [foto, setFoto] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -14,8 +15,8 @@ const AddDashboard = () => {
     e.preventDefault();
 
     // Validasi input
-    if (!name || !price || isNaN(price) || parseFloat(price) <= 0) {
-      setError('Nama dan harga kue harus diisi dengan harga yang valid!');
+    if (!namaKue || !hargaKue || !foto || isNaN(hargaKue) || parseFloat(hargaKue) <= 0) {
+      setError('Semua kolom wajib diisi dengan benar!');
       return;
     }
 
@@ -30,16 +31,22 @@ const AddDashboard = () => {
         return;
       }
 
-      // Payload yang dikirim ke Backend
-      const newDessert = {
-        namaMakanan: name,
-        harga: parseFloat(price),
-      };
+      // Membuat FormData untuk mengirim data kue dan file
+      const formData = new FormData();
+      const kueData = JSON.stringify({
+        namaKue,
+        hargaKue: parseFloat(hargaKue),
+      });
 
-      const response = await axios.post(
-        `${API_Toko}/tambah/${idAdmin}`,
-        newDessert
-      );
+      formData.append('kue', kueData);
+      formData.append('file', foto);
+
+      // Kirim permintaan ke backend
+      const response = await axios.post(`${API_Toko}/admin/toko/${idAdmin}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       if (response.status === 200) {
         navigate('/dashboard'); // Redirect ke halaman dashboard
@@ -47,8 +54,8 @@ const AddDashboard = () => {
         setError('Gagal menambah kue. Silakan coba lagi.');
       }
     } catch (error) {
-      setError('Terjadi kesalahan, gagal menambah kue. Silakan coba lagi.');
-      console.error('Error:', error); // Log error untuk debug
+      setError('Terjadi kesalahan. Gagal menambah kue.');
+      console.error('Error:', error);
     } finally {
       setLoading(false);
     }
@@ -67,33 +74,48 @@ const AddDashboard = () => {
         >
           <div className="mb-4">
             <label
-              htmlFor="name"
+              htmlFor="namaKue"
               className="block text-lg font-semibold text-gray-100 mb-2"
             >
               Nama Kue
             </label>
             <input
               type="text"
-              id="name"
+              id="namaKue"
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-gray-100"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={namaKue}
+              onChange={(e) => setNamaKue(e.target.value)}
             />
           </div>
 
           <div className="mb-4">
             <label
-              htmlFor="price"
+              htmlFor="hargaKue"
               className="block text-lg font-semibold text-gray-100 mb-2"
             >
-              Harga
+              Harga Kue
             </label>
             <input
               type="number"
-              id="price"
+              id="hargaKue"
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-gray-100"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={hargaKue}
+              onChange={(e) => setHargaKue(e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="foto"
+              className="block text-lg font-semibold text-gray-100 mb-2"
+            >
+              Foto Kue
+            </label>
+            <input
+              type="file"
+              id="foto"
+              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-gray-100"
+              onChange={(e) => setFoto(e.target.files[0])}
             />
           </div>
 
@@ -112,4 +134,4 @@ const AddDashboard = () => {
   );
 };
 
-export default AddDashboard;
+export default AddKue;
