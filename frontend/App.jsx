@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./src/component/Navbar.jsx";
 import AdminNavbar from "./src/component/Navbarkhusus.jsx";
 import Banner from "./src/component/banner/Banner.jsx";
-import Hero from "./src/component/hero/hero.jsx";
-import About from "./src/component/About/About.jsx";
+import Hero from "./src/component/banner/hero.jsx"
+import About from "./src/component/banner/About.jsx";
 import WhyChoose from "./src/component/WhyChoose/WhyChoose.jsx";
 import Popup from "./src/component/popup/popup.jsx";
 import DashboardAdmin from "./src/component/DashboardAdmin/Dashbord.jsx";

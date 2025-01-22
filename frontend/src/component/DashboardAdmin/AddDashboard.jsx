@@ -38,11 +38,11 @@ const AddKue = () => {
         hargaKue: parseFloat(hargaKue),
       });
 
-      formData.append('kue', kueData);
+      formData.append('toko', kueData);  // Ganti 'kue' dengan 'toko' jika mengikuti struktur endpoint backend
       formData.append('file', foto);
 
       // Kirim permintaan ke backend
-      const response = await axios.post(`${API_Toko}/admin/toko/${idAdmin}`, formData, {
+      const response = await axios.post(`${API_Toko}/tambah/${idAdmin}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

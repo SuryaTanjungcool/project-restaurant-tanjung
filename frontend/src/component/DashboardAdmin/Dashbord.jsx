@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AdminNavbar from '../Navbarkhusus';
-import { API_Toko } from "../../util/baseurl";
+import { API_Toko } from "../../util/BaseUrl";
 
 const AdminDashboard = () => {
   const adminData = JSON.parse(localStorage.getItem('adminData'));
@@ -82,6 +82,7 @@ const AdminDashboard = () => {
               <table className="min-w-full table-auto">
                 <thead className="bg-gray-700 text-gray-200">
                   <tr>
+                    <th className="py-3 px-4 text-left">Foto</th>
                     <th className="py-3 px-4 text-left">Nama Kue</th>
                     <th className="py-3 px-4 text-left">Harga</th>
                     <th className="py-3 px-4 text-center">Aksi</th>
@@ -90,11 +91,22 @@ const AdminDashboard = () => {
                 <tbody>
                   {dessertData.map((dessert) => (
                     <tr key={dessert.id} className="border-b border-gray-700">
+                      <td className="py-3 px-4">
+                        {dessert.fotoUrl ? (
+                          <img
+                            src={dessert.fotoUrl}
+                            alt={dessert.namaMakanan}
+                            className="w-16 h-16 object-cover rounded-md"
+                          />
+                        ) : (
+                          <span className="text-gray-400">Tidak ada foto</span>
+                        )}
+                      </td>
                       <td className="py-3 px-4">{dessert.namaMakanan || 'N/A'}</td>
                       <td className="py-3 px-4">Rp {(dessert.harga || 0).toLocaleString()}</td>
                       <td className="py-3 px-4 text-center">
                         <button
-                          onClick={() => handleEdit(dessert.id)} // Navigate to Edit page
+                          onClick={() => handleEdit(dessert.id)}
                           className="bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                         >
                           Edit
