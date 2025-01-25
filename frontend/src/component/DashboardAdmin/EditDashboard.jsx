@@ -124,7 +124,7 @@ const EditToko = ({ onEditToko, onClose }) => {
       }).then(() => {
         onEditToko?.(updatedToko);
         onClose?.();
-        navigate("/datatoko");
+        navigate("/dashboard");
       });
     } catch (error) {
       Swal.fire({
@@ -139,72 +139,76 @@ const EditToko = ({ onEditToko, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-      <div className="bg-white rounded-xl shadow-xl p-10 w-full sm:w-96 max-w-2xl">
-        <h3 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-          Edit Toko
-        </h3>
-        <div>
-          <label htmlFor="namaToko" className="text-gray-600">
-            Nama Toko
-          </label>
-          <input
-            type="text"
-            id="namaToko"
-            name="namaToko"
-            className="w-full border-gray-400 p-2 mb-4 mt-2 rounded-md shadow-sm"
-            value={toko.namaToko}
-            onChange={handleChange}
-          />
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-xl p-8">
+        <div
+          className="w-full text-center py-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl mb-6"
+        >
+          <h3 className="text-2xl font-bold">Edit Toko</h3>
         </div>
-        <div>
-          <label htmlFor="hargaToko" className="text-gray-600">
-            Harga Toko
-          </label>
-          <input
-            type="number"
-            id="hargaToko"
-            name="hargaToko"
-            className="w-full border-gray-400 p-2 mb-4 mt-2 rounded-md shadow-sm"
-            value={toko.hargaToko}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="foto" className="text-gray-600">
-            Foto Toko
-          </label>
-          <input
-            type="file"
-            id="foto"
-            name="foto"
-            accept="image/*"
-            className="w-full border-gray-400 p-2 mb-4 mt-2 rounded-md shadow-sm"
-            onChange={handleImageChange}
-          />
-          {preview && (
-            <div className="mt-2">
-              <img
-                src={preview}
-                alt="Preview Gambar"
-                className="w-full h-auto rounded-lg"
-              />
-            </div>
-          )}
+        <div className="max-h-[400px] overflow-y-auto"> {/* Tambahkan max-height dan overflow */}
+          <div>
+            <label htmlFor="namaToko" className="text-gray-700 font-medium">
+              Nama Toko
+            </label>
+            <input
+              type="text"
+              id="namaToko"
+              name="namaToko"
+              className="w-full border-2 border-gray-300 p-3 rounded-lg mt-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={toko.namaToko}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="hargaToko" className="text-gray-700 font-medium">
+              Harga Toko
+            </label>
+            <input
+              type="number"
+              id="hargaToko"
+              name="hargaToko"
+              className="w-full border-2 border-gray-300 p-3 rounded-lg mt-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={toko.hargaToko}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="foto" className="text-gray-700 font-medium">
+              Foto Toko
+            </label>
+            <input
+              type="file"
+              id="foto"
+              name="foto"
+              accept="image/*"
+              className="w-full border-2 border-gray-300 p-3 rounded-lg mt-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={handleImageChange}
+            />
+            {preview && (
+              <div className="mt-4">
+                <img
+                  src={preview}
+                  alt="Preview Gambar"
+                  className="w-full h-auto rounded-lg border"
+                />
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex justify-between mt-6">
           <button
             onClick={onClose}
-            className="bg-gray-400 text-white py-2 px-4 rounded-full hover:bg-gray-500 focus:outline-none"
+            className="bg-gray-400 text-white py-2 px-6 rounded-lg hover:bg-gray-500 transition"
           >
             Batal
           </button>
           <button
             onClick={handleEditToko}
             disabled={loading}
-            className={`${
-              loading ? "bg-gray-300" : "bg-blue-500"
-            } text-white py-2 px-4 rounded-full hover:bg-blue-600 focus:outline-none`}
+            className={`py-2 px-6 rounded-lg text-white ${
+              loading ? "bg-gray-300" : "bg-blue-500 hover:bg-blue-600"
+            } transition`}
           >
             {loading ? "Memproses..." : "Simpan Perubahan"}
           </button>

@@ -1,132 +1,177 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import AdminNavbar from '../Navbarkhusus';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import AdminNavbar from "../Navbarkhusus";
 import { API_Toko } from "../../util/BaseUrl";
 
 const AdminDashboard = () => {
-  const adminData = JSON.parse(localStorage.getItem('adminData'));
-  const idAdmin = adminData ? adminData.id : null;
-  const navigate = useNavigate();
-
   const [dessertData, setDessertData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [deleting, setDeleting] = useState(false);
 
-  // Fetch data
+  // Ambil data admin dari localStorage
+  const adminData = JSON.parse(localStorage.getItem("adminData"));
+  const idAdmin = adminData ? adminData.id : null;
+
   useEffect(() => {
-    const fetchDessertData = async () => {
-      if (!idAdmin) {
-        setError('ID Admin tidak ditemukan. Silakan login kembali.');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const response = await axios.get(`${API_Toko}/getAllByAdmin/${idAdmin}`);
-        setDessertData(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError('Gagal memuat data. Silakan coba lagi.');
-        setLoading(false);
-      }
-    };
-
-    fetchDessertData();
+    if (idAdmin) {
+      axios
+        .get(`${API_Toko}/getAllByAdmin/${idAdmin}`)
+        .then((response) => {
+          console.log("Data Kue:", response.data);
+          setDessertData(response.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching desserts:", err);
+          setError("Gagal memuat data kue.");
+          setLoading(false);
+        });
+    } else {
+      setError("ID Admin tidak ditemukan.");
+      setLoading(false);
+    }
   }, [idAdmin]);
 
-  // Handle delete
-  const handleDelete = async (id) => {
-    if (!window.confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
-
-    try {
-      setDeleting(true);
-      await axios.delete(`${API_Toko}/delete/${id}`);
-      setDessertData(dessertData.filter((item) => item.id !== id));
-      setDeleting(false);
-    } catch (err) {
-      setError('Gagal menghapus data. Silakan coba lagi.');
-      setDeleting(false);
-    }
-  };
-
-  // Handle edit (navigate to EditDashboard with id)
-  const handleEdit = (id) => {
-    navigate(`/EditDashboard/${id}`);
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Data yang dihapus tidak dapat dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${API_Toko}/delete/${id}`)
+          .then(() => {
+            setDessertData(dessertData.filter((item) => item.id !== id));
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil!",
+              text: "Data kue berhasil dihapus.",
+              confirmButtonText: "OK",
+            });
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Gagal!",
+              text: "Terjadi kesalahan saat menghapus data kue. Silakan coba lagi.",
+              confirmButtonText: "OK",
+            });
+            console.error("Error saat menghapus kue:", err);
+          });
+      }
+    });
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
       <AdminNavbar />
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-center text-gray-100 mb-8">
-          Dashboard Admin
-        </h1>
+      <main className="container mx-auto px-4 py-12 flex-grow">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold">Dashboard Admin</h2>
+          <p className="text-gray-400 mt-2">Kelola daftar kue Anda di sini.</p>
+        </div>
+        <a
+          href="/AddDashboard"
+          className="inline-block bg-blue-600 text-white py-3 px-8 rounded-md hover:bg-blue-500 mb-6"
+        >
+          + Tambah Kue Baru
+        </a>
 
-        {loading && <p className="text-center text-gray-400">Memuat data...</p>}
-        {error && <p className="text-center text-red-500">{error}</p>}
-
-        {!loading && !error && (
-          <>
-            <div className="mb-6 text-center">
-              <Link to="/AddDashboard">
-                <button className="bg-blue-600 text-white py-3 px-8 rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  Tambah Kue Baru
-                </button>
-              </Link>
-            </div>
-
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg overflow-x-auto">
-              <table className="min-w-full table-auto">
-                <thead className="bg-gray-700 text-gray-200">
+        {loading ? (
+          <div className="text-center text-xl text-gray-400">Memuat...</div>
+        ) : error ? (
+          <div className="text-center text-xl text-red-500">{error}</div>
+        ) : (
+          <div className="overflow-x-auto bg-gray-800 rounded-lg shadow-md">
+            <table className="min-w-full border-collapse text-gray-200">
+              <thead className="bg-gray-700">
+                <tr>
+                  <th className="px-6 py-3 text-left">No</th>
+                  <th className="px-6 py-3 text-left">Foto</th>
+                  <th className="px-6 py-3 text-left">Nama Kue</th>
+                  <th className="px-6 py-3 text-left">Harga</th>
+                  <th className="px-6 py-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dessertData.length === 0 ? (
                   <tr>
-                    <th className="py-3 px-4 text-left">Foto</th>
-                    <th className="py-3 px-4 text-left">Nama Kue</th>
-                    <th className="py-3 px-4 text-left">Harga</th>
-                    <th className="py-3 px-4 text-center">Aksi</th>
+                    <td
+                      colSpan="5"
+                      className="px-6 py-8 text-center text-gray-400"
+                    >
+                      <p className="text-xl">Belum ada data kue.</p>
+                      <img
+                        src="/images/empty-data.svg"
+                        alt="No data"
+                        className="mx-auto w-64 mt-4"
+                      />
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {dessertData.map((dessert) => (
-                    <tr key={dessert.id} className="border-b border-gray-700">
-                      <td className="py-3 px-4">
+                ) : (
+                  dessertData.map((dessert, index) => (
+                    <tr
+                      key={dessert.id}
+                      className={`${
+                        index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
+                      } border-b border-gray-600 hover:bg-gray-600 transition`}
+                    >
+                      <td className="px-6 py-4">{index + 1}</td>
+                      <td className="px-6 py-4">
                         {dessert.fotoUrl ? (
                           <img
                             src={dessert.fotoUrl}
                             alt={dessert.namaMakanan}
-                            className="w-16 h-16 object-cover rounded-md"
+                            className="w-16 h-16 object-cover rounded"
                           />
                         ) : (
                           <span className="text-gray-400">Tidak ada foto</span>
                         )}
                       </td>
-                      <td className="py-3 px-4">{dessert.namaMakanan || 'N/A'}</td>
-                      <td className="py-3 px-4">Rp {(dessert.harga || 0).toLocaleString()}</td>
-                      <td className="py-3 px-4 text-center">
-                        <button
-                          onClick={() => handleEdit(dessert.id)}
-                          className="bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      <td className="px-6 py-4">{dessert.namaMakanan}</td>
+                      <td className="px-6 py-4">
+                        {typeof dessert.harga === "number" ? (
+                          `Rp ${dessert.harga.toLocaleString()}`
+                        ) : (
+                          <span className="text-gray-400">
+                            Harga tidak tersedia
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-center space-x-4">
+                        <a
+                          href={`/EditDashboard/${dessert.id}`}
+                          className="bg-yellow-500 text-gray-900 py-2 px-4 rounded hover:bg-yellow-600"
                         >
-                          Edit
-                        </button>
+                          Ubah
+                        </a>
                         <button
                           onClick={() => handleDelete(dessert.id)}
-                          className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 ml-2"
-                          disabled={deleting}
+                          className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
                         >
-                          {deleting ? 'Menghapus...' : 'Hapus'}
+                          Hapus
                         </button>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
-      </div>
+      </main>
+      <footer className="bg-gray-800 text-gray-400 py-8">
+        <div className="container mx-auto text-center">
+          <p>&copy; 2025 DessertApp. All Rights Reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
